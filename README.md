@@ -7,3 +7,4 @@
 
 - [x] The Python Data Model
 - [x] An Array of Sequences
+- [x] Dictionaries and Set
