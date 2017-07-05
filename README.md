@@ -9,3 +9,4 @@
 - [x] An Array of Sequences
 - [x] Dictionaries and Set
 - [x] Text and Bytes
+- [x] First class functions
