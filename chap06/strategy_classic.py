@@ -37,7 +37,7 @@ class Order:
             if self.promition is None:
                 self.__discount = 0
             else:
-                self.__discount = self.promition.discount(self)
+                self.__discount = self.promition(self)
         return self.__discount
 
     @property
@@ -49,38 +49,42 @@ class Order:
         return fmt.format(self.total, self.discount, self.due)
 
 
-class Promotion(ABC):
-    @abstractmethod
-    def discount(self, order):
-        """Return discount as a positive dollar amount"""
+promos = []
 
 
-class FidelityPromo(Promotion):
+def promotion(promo_func):
+    promos.append(promo_func)
+    return promo_func
+
+
+@promotion
+def fidelity(order):
     """5% discount for customers with 1000 or more fidelity points"""
-
-    def discount(self, order):
-        return order.total * 0.05 if order.customer.fidelity >= 1000 else 0
+    return order.total * 0.05 if order.customer.fidelity >= 1000 else 0
 
 
-class BulkItemPromo(Promotion):
+@promotion
+def buik_item(order):
     """10% discount for each LineItem with 20 or more units"""
-
-    def discount(self, order):
-        discount = 0
-        for item in order.cart:
-            if item.quantity >= 20:
-                discount += item.total * 0.1
-        return discount
+    discount = 0
+    for item in order.cart:
+        if item.quantity >= 20:
+            discount += item.total * 0.1
+    return discount
 
 
-class LargeOrderPromo(Promotion):
+@promotion
+def large_order(order):
     """7% discount for orders with 7 or more distinct items"""
+    distinct_items = {item.product for item in order.cart}
+    if len(distinct_items) >= 7:
+        return order.total * 0.07
+    return 0
 
-    def discount(self, order):
-        distinct_items = {item.product for item in order.cart}
-        if len(distinct_items) >= 7:
-            return order.total * 0.07
-        return 0
+
+def best_promo(order):
+    """select best discount available"""
+    return max(promo(order) for promo in promos)
 
 
 if __name__ == '__main__':
@@ -89,7 +93,7 @@ if __name__ == '__main__':
     cart = [LineItem('banana', 4, 0.5),
             LineItem('apple', 10, 1.5),
             LineItem('watermallon', 5, 5.0)]
-    order_a = Order(joe, cart, FidelityPromo())
-    order_b = Order(ann, cart, FidelityPromo())
+    order_a = Order(joe, cart, best_promo)
+    order_b = Order(ann, cart, best_promo)
     print(order_a)
     print(order_b)

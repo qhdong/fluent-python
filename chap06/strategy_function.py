@@ -1,16 +1,6 @@
 # -*- coding: utf-8 -*-
-import inspect
-from chap06 import promotions
+from chap06.promotions import best_promo
 from collections import namedtuple
-
-
-promos = [func for name, func
-          in inspect.getmembers(promotions, inspect.isfunction)]
-
-
-def best_promos(order):
-    """Select best discount available"""
-    return max(promo(order) for promo in promos)
 
 
 Customer = namedtuple('Customer', 'name fidelity')
@@ -61,7 +51,7 @@ if __name__ == '__main__':
     tom = Customer('tom', 10000)
     banana_cart = [ListItem('banana', 1000, 0.5), ListItem('milk', 300, 5.5)]
     adult_cart = [ListItem('durex', 30, 10), ListItem('orcodo', 10, 20)]
-    order_1 = Order(joe, banana_cart, best_promos)
-    order_2 = Order(tom, adult_cart, best_promos)
+    order_1 = Order(joe, banana_cart, best_promo)
+    order_2 = Order(tom, adult_cart, best_promo)
     print(order_1)
     print(order_2)
