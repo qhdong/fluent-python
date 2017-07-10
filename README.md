@@ -12,3 +12,4 @@
 - [x] First class functions
 - [x] Design Patterns with First-class Functions
 - [x] Function Decorators and Closures
+- [x] Object References, Mutability, and Recycling
