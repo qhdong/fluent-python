@@ -14,3 +14,4 @@
 - [x] Function Decorators and Closures
 - [x] Object References, Mutability, and Recycling
 - [x] A Pythonic Object
+- [x] Sequence Hacking, Hashing and Slicing
